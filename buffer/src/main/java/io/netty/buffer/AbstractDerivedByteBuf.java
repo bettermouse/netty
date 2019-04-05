@@ -21,6 +21,7 @@ import java.nio.ByteBuffer;
 /**
  * Abstract base class for {@link ByteBuf} implementations that wrap another
  * {@link ByteBuf}.
+ * 封装另一个ByteBuf实现的ByteBuf抽象基类。
  */
 public abstract class AbstractDerivedByteBuf extends AbstractByteBuf {
 

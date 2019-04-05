@@ -33,19 +33,28 @@ import java.nio.charset.UnsupportedCharsetException;
  * This interface provides an abstract view for one or more primitive byte
  * arrays ({@code byte[]}) and {@linkplain ByteBuffer NIO buffers}.
  *
+ * 零个或多个字节（八位字节）的随机和顺序可访问序列,此接口为一个或多个原始字节数组
+ * ({@code byte[]})和 {@linkplain ByteBuffer NIO buffers}提供抽象视图。
+ *
  * <h3>Creation of a buffer</h3>
+ * <h3>buffer的创建</h3>
  *
  * It is recommended to create a new buffer using the helper methods in
  * {@link Unpooled} rather than calling an individual implementation's
  * constructor.
  *
+ * 建议用{@link Unpooled}中的帮助方法创建一个新的buffer,而不是调用单个实现的构造函数。
  * <h3>Random Access Indexing</h3>
+ *<h3>随机访问索引</h3>
  *
  * Just like an ordinary primitive byte array, {@link ByteBuf} uses
  * <a href="http://en.wikipedia.org/wiki/Zero-based_numbering">zero-based indexing</a>.
  * It means the index of the first byte is always {@code 0} and the index of the last byte is
  * always {@link #capacity() capacity - 1}.  For example, to iterate all bytes of a buffer, you
  * can do the following, regardless of its internal implementation:
+ *
+ *就像普通的原始字节数组一样,ByteBuf使用从零开始的索引。它意味着第一个byte的索引总是0,最后byte的索引
+ *总是capacity - 1,例如,迭代一个buffer的所有字节,无论它的内部实现如何,你都可以做下面的操作
  *
  * <pre>
  * {@link ByteBuf} buffer = ...;
@@ -56,23 +65,27 @@ import java.nio.charset.UnsupportedCharsetException;
  * </pre>
  *
  * <h3>Sequential Access Indexing</h3>
+ * <h3>序列访问的索引</h3>
  *
  * {@link ByteBuf} provides two pointer variables to support sequential
  * read and write operations - {@link #readerIndex() readerIndex} for a read
  * operation and {@link #writerIndex() writerIndex} for a write operation
  * respectively.  The following diagram shows how a buffer is segmented into
  * three areas by the two pointers:
+ * ByteBuf提供两个指针变量来支持顺序读写操作操作,readerIndex用来读操作,writerIndex用来
+ * 写操作,下图显示了如何通过两个指针将缓冲区分为三个区域：
  *
  * <pre>
  *      +-------------------+------------------+------------------+
  *      | discardable bytes |  readable bytes  |  writable bytes  |
- *      |                   |     (CONTENT)    |                  |
+ *      | 丢弃              |     (CONTENT)    |                  |
  *      +-------------------+------------------+------------------+
  *      |                   |                  |                  |
  *      0      <=      readerIndex   <=   writerIndex    <=    capacity
  * </pre>
  *
  * <h4>Readable bytes (the actual content)</h4>
+ *<h4>可读的数组(the actual content)</h4>
  *
  * This segment is where the actual data is stored.  Any operation whose name
  * starts with {@code read} or {@code skip} will get or skip the data at the
@@ -80,11 +93,17 @@ import java.nio.charset.UnsupportedCharsetException;
  * read bytes.  If the argument of the read operation is also a
  * {@link ByteBuf} and no destination index is specified, the specified
  * buffer's {@link #writerIndex() writerIndex} is increased together.
+ *
+ * 这个分段是真实数据存储的地方.一个以read 或skip为起始名字的操作将得到或者skip当前readerIndex
+ * 的数据,并将其增加读取字节数,如果读取操作的参数也是ByteBuf且未指定目标索引，
+ * 则指定缓冲区的writerIndex将一起增加。
+ *
  * <p>
  * If there's not enough content left, {@link IndexOutOfBoundsException} is
  * raised.  The default value of newly allocated, wrapped or copied buffer's
  * {@link #readerIndex() readerIndex} is {@code 0}.
- *
+ * 如果没有足够的内容，则引发IndexOutOfBoundsException.新分配,包装或复制缓冲区的
+ * readerIndex的默认值为0。
  * <pre>
  * // Iterates the readable bytes of a buffer.
  * {@link ByteBuf} buffer = ...;
@@ -94,6 +113,7 @@ import java.nio.charset.UnsupportedCharsetException;
  * </pre>
  *
  * <h4>Writable bytes</h4>
+ * <h4>可写字节</h4>
  *
  * This segment is a undefined space which needs to be filled.  Any operation
  * whose name ends with {@code write} will write the data at the current
@@ -101,15 +121,22 @@ import java.nio.charset.UnsupportedCharsetException;
  * bytes.  If the argument of the write operation is also a {@link ByteBuf},
  * and no source index is specified, the specified buffer's
  * {@link #readerIndex() readerIndex} is increased together.
+ * 这个段是没定义的需要被填满的空间,以write为结尾的名字的操作在writerIndex将写数据,并且
+ * 增加写入的数据,如果写操作的参数是一个ByteBuf,没有source index被指定,readerIndex也一起
+ * 增加
+ *
  * <p>
  * If there's not enough writable bytes left, {@link IndexOutOfBoundsException}
  * is raised.  The default value of newly allocated buffer's
  * {@link #writerIndex() writerIndex} is {@code 0}.  The default value of
  * wrapped or copied buffer's {@link #writerIndex() writerIndex} is the
  * {@link #capacity() capacity} of the buffer.
+ * 如果没有足够的可写字节剩下,引发IndexOutOfBoundsException,新分配的buffer的writerIndex
+ * 是0,包装的复制的buffer的writerIndex是buffer的capacity
  *
  * <pre>
  * // Fills the writable bytes of a buffer with random integers.
+ * //用随机整数填充缓冲区的可写字节。
  * {@link ByteBuf} buffer = ...;
  * while (buffer.maxWritableBytes() >= 4) {
  *     buffer.writeInt(random.nextInt());
@@ -117,12 +144,17 @@ import java.nio.charset.UnsupportedCharsetException;
  * </pre>
  *
  * <h4>Discardable bytes</h4>
+ * <h4>丢弃的字节</h4>
  *
  * This segment contains the bytes which were read already by a read operation.
  * Initially, the size of this segment is {@code 0}, but its size increases up
  * to the {@link #writerIndex() writerIndex} as read operations are executed.
  * The read bytes can be discarded by calling {@link #discardReadBytes()} to
  * reclaim unused area as depicted by the following diagram:
+ *
+ * 这个段包含已经被读操作读的字节,初始的,这个段的大小是0,但是当read操作被执行
+ * 它的大小增加到writerIndex,如下图所示,通过调用discardReadBytes来回收没有使用的区域
+ *
  *
  * <pre>
  *  BEFORE discardReadBytes()
@@ -148,6 +180,8 @@ import java.nio.charset.UnsupportedCharsetException;
  * moved in most cases and could even be filled with completely different data
  * depending on the underlying buffer implementation.
  *
+ * 请注意,在调用 discardReadBytes 没有关于可写字节的内容的保证,在大多数情况下可以写的字节将不会被
+ *移动,甚至可以根据底层缓冲区实现填充完全不同的数据。
  * <h4>Clearing the buffer indexes</h4>
  *
  * You can set both {@link #readerIndex() readerIndex} and
@@ -155,6 +189,9 @@ import java.nio.charset.UnsupportedCharsetException;
  * It does not clear the buffer content (e.g. filling with {@code 0}) but just
  * clears the two pointers.  Please also note that the semantic of this
  * operation is different from {@link ByteBuffer#clear()}.
+ * 你可以通过调用clear方法来设置readerIndex和writerIndex到0,它没有清理buffer的内容.
+ * (例如用0填)但是仅仅清理两个指针,请注意这个操作的语义和{@link ByteBuffer#clear()}
+ * 是不同的
  *
  * <pre>
  *  BEFORE clear()
@@ -176,11 +213,15 @@ import java.nio.charset.UnsupportedCharsetException;
  * </pre>
  *
  * <h3>Search operations</h3>
+ * <h3>查找操作</h3>
  *
  * For simple single-byte searches, use {@link #indexOf(int, int, byte)} and {@link #bytesBefore(int, int, byte)}.
  * {@link #bytesBefore(byte)} is especially useful when you deal with a {@code NUL}-terminated string.
  * For complicated searches, use {@link #forEachByte(int, int, ByteProcessor)} with a {@link ByteProcessor}
  * implementation.
+ *
+ * 简单的
+ *
  *
  * <h3>Mark and reset</h3>
  *
@@ -229,6 +270,7 @@ import java.nio.charset.UnsupportedCharsetException;
  *
  * Please refer to {@link ByteBufInputStream} and
  * {@link ByteBufOutputStream}.
+
  */
 @SuppressWarnings("ClassMayBeInterface")
 public abstract class ByteBuf implements ReferenceCounted, Comparable<ByteBuf> {

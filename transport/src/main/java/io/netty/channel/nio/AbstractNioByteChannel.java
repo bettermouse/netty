@@ -108,6 +108,7 @@ public abstract class AbstractNioByteChannel extends AbstractNioChannel {
             try {
                 boolean needReadPendingReset = true;
                 do {
+                    //得到byteBuf
                     byteBuf = allocHandle.allocate(allocator);
                     allocHandle.lastBytesRead(doReadBytes(byteBuf));
                     if (allocHandle.lastBytesRead() <= 0) {

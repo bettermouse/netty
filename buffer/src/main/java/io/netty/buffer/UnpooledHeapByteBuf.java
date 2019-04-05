@@ -28,6 +28,7 @@ import java.nio.channels.ScatteringByteChannel;
 
 /**
  * Big endian Java heap buffer implementation.
+ * 大端java堆buffer实现
  */
 public class UnpooledHeapByteBuf extends AbstractReferenceCountedByteBuf {
 
