@@ -153,6 +153,7 @@ public interface Channel extends AttributeMap, Comparable<Channel> {
     /**
      * Returns the {@link ChannelFuture} which will be notified when this
      * channel is closed.  This method always returns the same future instance.
+     * 返回ChannelFuture，该通道将在此通道关闭时得到通知。 此方法始终返回相同的future实例。
      */
     ChannelFuture closeFuture();
 

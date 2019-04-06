@@ -146,6 +146,7 @@ public final class ChannelHandlerInvokerUtil {
 
     public static void invokeReadNow(final ChannelHandlerContext ctx) {
         try {
+            //调用自己的read方法
             ctx.handler().read(ctx);
         } catch (Throwable t) {
             notifyHandlerException(ctx, t);

@@ -252,6 +252,7 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
                 checkDeadLock();
                 incWaiters();
                 try {
+                    //加锁调用wait方法等待
                     wait();
                 } finally {
                     decWaiters();
@@ -402,6 +403,7 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
     }
 
     @Override
+    //通知listener
     public boolean trySuccess(V result) {
         if (setSuccess0(result)) {
             notifyListeners();
