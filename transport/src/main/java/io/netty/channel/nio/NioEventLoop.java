@@ -301,6 +301,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
     protected void run() {
         boolean oldWakenUp = wakenUp.getAndSet(false);
         try {
+            //如果有用户任务,立即返回(查看taskQueue)
             if (hasTasks()) {
                 selectNow();
             } else {

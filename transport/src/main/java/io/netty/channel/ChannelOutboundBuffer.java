@@ -46,6 +46,11 @@ import java.util.concurrent.atomic.AtomicLongFieldUpdater;
  * <li>{@link #getUserDefinedWritability(int)} and {@link #setUserDefinedWritability(int, boolean)}</li>
  * </ul>
  * </p>
+ *
+ * (传输实现者) AbstractChannel使用的一个内部的结构来  存储它的待发送请求
+ * 所有方法都必须由I / O线程的传输实现调用，但以下方法除外：
+ * size（）和isEmpty（）
+ *
  */
 public final class ChannelOutboundBuffer {
 

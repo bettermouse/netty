@@ -52,7 +52,12 @@ public class TimeServer {
 	    // 绑定端口，同步等待成功
 		ChannelFuture bind = b.bind(port);
 		ChannelFuture f = bind.sync();
-
+//		f.channel().eventLoop().schedule(new Runnable() {
+//			@Override
+//			public void run() {
+//				xxx
+//			}
+//		})
 	    // 等待服务端监听端口关闭
 	    f.channel().closeFuture().sync();
 	} finally {

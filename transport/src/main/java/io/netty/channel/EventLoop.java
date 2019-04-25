@@ -24,6 +24,8 @@ import io.netty.util.concurrent.EventExecutor;
  * One {@link EventLoop} instance will usually handle more than one {@link Channel} but this may depend on
  * implementation details and internals.
  *
+ * 一旦注册，将处理通道的所有I / O操作。一个EventLoop实例通常处理超过一个channel
+ * 但这可能取决于实现细节和内部
  */
 public interface EventLoop extends EventExecutor, EventLoopGroup {
     @Override
@@ -35,6 +37,7 @@ public interface EventLoop extends EventExecutor, EventLoopGroup {
     /**
      * Creates a new default {@link ChannelHandlerInvoker} implementation that uses this {@link EventLoop} to
      * invoke event handler methods.
+     * 创建一个新的默认ChannelHandlerInvoker实现，该实现使用此EventLoop来调用事件处理程序方法
      */
     ChannelHandlerInvoker asInvoker();
 }

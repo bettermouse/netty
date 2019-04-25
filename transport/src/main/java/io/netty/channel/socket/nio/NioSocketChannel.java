@@ -317,6 +317,7 @@ public class NioSocketChannel extends AbstractNioByteChannel implements io.netty
             }
 
             // Release the fully written buffers, and update the indexes of the partially written buffer.
+
             in.removeBytes(writtenBytes);
 
             if (!done) {

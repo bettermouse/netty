@@ -101,6 +101,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
     }
 
     @Override
+    //查看可写.
     public boolean isWritable() {
         ChannelOutboundBuffer buf = unsafe.outboundBuffer();
         return buf != null && buf.isWritable();
