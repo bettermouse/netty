@@ -446,7 +446,9 @@ abstract class AbstractChannelHandlerContext implements ChannelHandlerContext, R
 
     @Override
     public ChannelHandlerContext read() {
+        //找到对应的HandleContext
         AbstractChannelHandlerContext next = findContextOutbound();
+        //调用者调用自己
         next.invoker().invokeRead(next);
         return this;
     }

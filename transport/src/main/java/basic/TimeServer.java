@@ -23,6 +23,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 
 /**
  * @author lilinfeng
@@ -51,6 +53,14 @@ public class TimeServer {
 		    .childHandler(new ChildChannelHandler()); //要Handler
 	    // 绑定端口，同步等待成功
 		ChannelFuture bind = b.bind(port);
+//		bind.addListener( new GenericFutureListener() {
+//
+//			@Override
+//			public void operationComplete(Future future) throws Exception {
+//				System.out.printf("operationComplete");
+//
+//			}
+//		});
 		ChannelFuture f = bind.sync();
 //		f.channel().eventLoop().schedule(new Runnable() {
 //			@Override

@@ -16,13 +16,14 @@
 package basic;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author lilinfeng
@@ -55,13 +56,45 @@ public class TimeClient {
 		    });
 
 	    // 发起异步连接操作
-	    ChannelFuture f = b.connect(host, port).sync();
+		ChannelFuture connect = b.connect(host, port).sync();
 
-	    // 当代客户端链路关闭
-	    f.channel().closeFuture().sync();
+//		connect.channel().closeFuture().
+//				addListener(new ChannelFutureListener() {
+//					@Override
+//					public void operationComplete(ChannelFuture future) throws Exception {
+//						future.channel().eventLoop().schedule(new Runnable() {
+//							@Override
+//							public void run() {
+//								//这一段代码必须要不停的掉用
+//								System.out.println("AAAAAA");
+//							}
+//						}, 5, TimeUnit.SECONDS);
+//					}
+//				}).sync();
+
+				//.channel().closeFuture().sync();
+
+		//ChannelFuture f = connect.sync();
+
+	    // 当客户端链路关闭
+		//connect.channel().closeFuture().sync();
+//		new Thread(new Runnable() {
+//			@Override
+//			public void run() {
+//				while (true){
+//					try {
+//						Thread.sleep(10000);
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+//					System.out.println("i want to gg");
+//				}
+//			}
+//		}).start();
+
 	} finally {
 	    // 优雅退出，释放NIO线程组
-	    group.shutdownGracefully();
+	 //   group.shutdownGracefully();
 	}
     }
 

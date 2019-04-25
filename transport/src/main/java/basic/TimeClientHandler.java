@@ -67,6 +67,6 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
 	// 释放资源
 	logger.warning("Unexpected exception from downstream : "
 		+ cause.getMessage());
-	ctx.close();
+	//ctx.close();
     }
 }

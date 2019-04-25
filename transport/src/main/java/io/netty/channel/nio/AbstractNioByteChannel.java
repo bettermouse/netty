@@ -84,8 +84,10 @@ public abstract class AbstractNioByteChannel extends AbstractNioChannel {
             }
             allocHandle.readComplete();
             pipeline.fireChannelReadComplete();
+            //远程主机强迫关闭了一个现有的连接。
             pipeline.fireExceptionCaught(cause);
             if (close || cause instanceof IOException) {
+                //如果 是IOException 关闭 channel
                 closeOnRead(pipeline);
             }
         }
@@ -134,6 +136,8 @@ public abstract class AbstractNioByteChannel extends AbstractNioChannel {
                     closeOnRead(pipeline);
                 }
             } catch (Throwable t) {
+                //远程主机强迫关闭了一个现有的连接。
+                // boolean close  allocHandle.lastBytesRead() < 0
                 handleReadException(pipeline, byteBuf, t, allocHandle.lastBytesRead() < 0, allocHandle);
             } finally {
                 // Check if there is a readPending which was not processed yet.
